@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace URLearning_cs
+namespace AdTreeScoring
 {
     class Program
     {
