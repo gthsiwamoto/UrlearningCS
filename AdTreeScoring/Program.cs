@@ -1,5 +1,5 @@
 ﻿using System;
-using DataStructures;
+using Datastructures;
 
 namespace AdTreeScoring
 {
@@ -17,10 +17,13 @@ namespace AdTreeScoring
 
             // csvファイルの読み込み
             RecordFile recordFile = new RecordFile();
-            recordFile.readRecord(args[0]);
-            recordFile.print();
+            recordFile.ReadRecord(args[0]);
 
-            Console.In.ReadLine();
+            BayesianNetwork network = new BayesianNetwork();
+            network.Initialize(recordFile);
+
+
+            //Console.In.ReadLine();
         }
     }
 }

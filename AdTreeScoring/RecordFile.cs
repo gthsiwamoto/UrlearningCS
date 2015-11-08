@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace DataStructures
+namespace Datastructures
 {
     class RecordFile
     {
         public RecordFile()
         {
-            this.header = new List<string>();
-            this.record = new List<List<string>>();
+            header = new List<string>();
+            record = new List<List<string>>();
+            hasHeader = false;
         }
 
-        ~RecordFile() { }
-
-        public void readRecord(string filePath, bool hasHeader = true, char delim = ',')
+        public void ReadRecord(string filePath, bool hasHeader = true, char delimiter = ',')
         {
             StreamReader sr;
             try
@@ -27,35 +26,60 @@ namespace DataStructures
                 return;
             }
 
+            this.hasHeader = hasHeader;
             if (hasHeader && !sr.EndOfStream)
             {
                 string header_line = sr.ReadLine();
-                header = new List<string>(header_line.Split(delim));
+                header = new List<string>(header_line.Split(delimiter));
             }
 
-            int idx = 0;
             while (sr.EndOfStream == false)
             {
                 string read_line = sr.ReadLine();
-                List<string> line = new List<string>(read_line.Split(delim));
-                record.Add(line);
+                List<string> line = new List<string>(read_line.Split(delimiter));
+                Record.Add(line);
             }
             sr.Close();
 
         }
 
-        public void print()
+        public void Print()
         {
             // ヘッダの出力
-            Console.WriteLine(string.Join(",", header));
+            Console.WriteLine(string.Join(",", Header));
 
             // データの出力
-            record.ForEach(line => Console.WriteLine(string.Join(",", line)));
+            Record.ForEach(line => Console.WriteLine(string.Join(",", line)));
 
         }
 
+
         private List<string> header;
+        public List<string> Header
+        {
+            get
+            {
+                return header;
+            }
+        }
+
         private List<List<string>> record;
+        public List<List<string>> Record
+        {
+            get
+            {
+                return record;
+            }
+        }
+
+        private bool hasHeader;
+        public bool HasHeader
+        {
+            get
+            {
+                return hasHeader;
+            }
+        }
 
     }
 }
