@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AdNode.cs" />
     <Compile Include="AdTree.cs" />
+    <Compile Include="AdTreeScoring.cs" />
     <Compile Include="BayesianNetwork.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
