@@ -19,15 +19,14 @@ namespace AdTreeScoring
             // 暫定的に初期値を代入
             int rMin = 5; // The minimum number of records in the AD-tree nodes.
             char delimiter = ',';
-            bool hasHeader = false;
+            bool hasHeader = true;
             string sf = "BIC";
             int maxParents = 0;
-
 
             // csvファイルの読み込み
             RecordFile recordFile = new RecordFile();
             recordFile.ReadRecord(args[0], hasHeader, delimiter);
-            recordFile.Print();
+            //recordFile.Print();
 
             // BayesianNetworkの初期化
             BayesianNetwork network = new BayesianNetwork(recordFile);
@@ -37,7 +36,6 @@ namespace AdTreeScoring
 
             // scoring functionの設定
             sf = sf.ToLower();
-
 
             //Console.In.ReadLine();
         }
