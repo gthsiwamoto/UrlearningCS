@@ -41,7 +41,16 @@ namespace AdTreeScoring
         {
             // since this is index i, there are (variableCount - i) remaining variables.
             // therefore, it will have that many children
-            AdNode adn = new AdNode(network.Size() - i, recordNums.Count);
+            int count = 0;
+            for(int idx = 0; idx < recordNums.Count; idx++)
+            {
+                if (recordNums[idx])
+                {
+                    count += 1;
+                }
+            }
+
+            AdNode adn = new AdNode(network.Size() - i, count);
 
             // check if we should just use a leaf list
             if (adn.Count < rMin)
@@ -54,9 +63,6 @@ namespace AdTreeScoring
             // for each of the remaining variables
             for (int j = i; j < network.Size(); j++)
             {
-                Console.WriteLine("DEBUG j");
-                Console.WriteLine(j);
-
                 // create a vary node
                 Varset newVariables = variables.Set(j);
                 VaryNode child = MakeVaryNode(j, recordNums, depth, newVariables);
@@ -83,7 +89,14 @@ namespace AdTreeScoring
                 childNums[k].And(consistentRecords[i][k]);
 
                 // also look for the mcv
-                int count = childNums[k].Count;
+                int count = 0;
+                for (int idx = 0; idx < childNums[k].Count; idx++)
+                {
+                    if (childNums[k][idx])
+                    {
+                        count += 1;
+                    }
+                }
                 if (count > mcvCount)
                 {
                     mcv = k;
@@ -97,6 +110,14 @@ namespace AdTreeScoring
             // otherwise, rescue
             for (int k = 0; k < network.GetCardinality(i); k++)
             {
+                int count = 0;
+                for (int idx = 0; idx < childNums[k].Count; idx++)
+                {
+                    if (childNums[k][idx])
+                    {
+                        count += 1;
+                    }
+                }
                 if (k == mcv || childNums[k].Count == 0)
                 {
                     continue;

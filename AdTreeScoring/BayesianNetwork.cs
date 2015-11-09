@@ -16,7 +16,7 @@ namespace Datastructures
         private void Initialize(RecordFile recordFile)
         {
             // 変数名の設定
-            for (int i = 0; i < recordFile.Records[0].Count; i++)
+            for (int i = 0; i < recordFile.Header.Count; i++)
             {
                 Variable v = new Variable(this, i);
                 v.Name = recordFile.Header[i];
