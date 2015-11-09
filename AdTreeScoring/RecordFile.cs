@@ -8,9 +8,6 @@ namespace Datastructures
     {
         public RecordFile()
         {
-            header = new List<string>();
-            record = new List<List<string>>();
-            hasHeader = false;
         }
 
         public void ReadRecord(string filePath, bool hasHeader = true, char delimiter = ',')
@@ -36,8 +33,8 @@ namespace Datastructures
             while (sr.EndOfStream == false)
             {
                 string read_line = sr.ReadLine();
-                List<string> line = new List<string>(read_line.Split(delimiter));
-                Record.Add(line);
+                Record line = new Record(read_line.Split(delimiter));
+                Records.Add(line);
             }
             sr.Close();
 
@@ -49,12 +46,17 @@ namespace Datastructures
             Console.WriteLine(string.Join(",", Header));
 
             // データの出力
-            Record.ForEach(line => Console.WriteLine(string.Join(",", line)));
+            Records.ForEach(line => Console.WriteLine(string.Join(",", line)));
 
         }
 
+        public int Size()
+        {
+            return records.Count;
+        }
 
-        private List<string> header;
+
+        private List<string> header = new List<string>();
         public List<string> Header
         {
             get
@@ -63,16 +65,16 @@ namespace Datastructures
             }
         }
 
-        private List<List<string>> record;
-        public List<List<string>> Record
+        private List<Record> records = new List<Record>();
+        public List<Record> Records
         {
             get
             {
-                return record;
+                return records;
             }
         }
 
-        private bool hasHeader;
+        private bool hasHeader = false;
         public bool HasHeader
         {
             get

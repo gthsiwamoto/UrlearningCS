@@ -19,9 +19,12 @@ namespace AdTreeScoring
             RecordFile recordFile = new RecordFile();
             recordFile.ReadRecord(args[0]);
 
-            BayesianNetwork network = new BayesianNetwork();
-            network.Initialize(recordFile);
+            // BayesianNetworkの初期化
+            BayesianNetwork network = new BayesianNetwork(recordFile);
 
+            // AD-Treeの初期化
+            int rMin = 5; // The minimum number of records in the AD-tree nodes.
+            AdTree adTree = new AdTree(rMin, network, recordFile);
 
             //Console.In.ReadLine();
         }

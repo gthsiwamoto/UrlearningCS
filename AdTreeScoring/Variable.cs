@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Datastructures
 {
@@ -13,7 +12,7 @@ namespace Datastructures
 
         public void AddValues(RecordFile recordFile)
         {
-            recordFile.Record.ForEach(line => AddValue(line[index]));
+            recordFile.Records.ForEach(line => AddValue(line[index]));
         }
 
         public void AddValue(string value)
@@ -48,6 +47,13 @@ namespace Datastructures
         private int index;
         private BayesianNetwork network;
         private Dictionary<string, int> valueToIndex = new Dictionary<string, int>(); 
+        public Dictionary<string, int> ValueToIndex
+        {
+            get
+            {
+                return valueToIndex;
+            }
+        }
         private List<string> values = new List<string>();
     }
 }
