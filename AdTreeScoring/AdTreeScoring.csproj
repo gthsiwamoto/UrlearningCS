@@ -47,6 +47,7 @@
     <Compile Include="AdTree.cs" />
     <Compile Include="AdTreeScoring.cs" />
     <Compile Include="BayesianNetwork.cs" />
+    <Compile Include="LogLikelihoodCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Record.cs" />

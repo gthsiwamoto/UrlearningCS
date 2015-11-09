@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Datastructures;
 
 namespace Scoring
@@ -66,6 +67,10 @@ namespace Scoring
             //}
 
             ScoringFunction scoringFunction = null;
+
+            List<double> ilogi = LogLikelihoodCalculator.GetLogCache(recordFile.Size());
+            LogLikelihoodCalculator llc = new LogLikelihoodCalculator(adTree, network, iloi);
+
         }
     }
 }
