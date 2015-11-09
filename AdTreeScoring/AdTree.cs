@@ -83,8 +83,8 @@ namespace AdTreeScoring
             for (int k = 0; k < network.GetCardinality(i); k++)
             {
                 childNums.Add(new BitArray(recordCount));
-                childNums[k].Or(recordNums);
-                childNums[k].And(consistentRecords[i][k]);
+                childNums[k] = childNums[k].Or(recordNums);
+                childNums[k] = childNums[k].And(consistentRecords[i][k]);
 
                 // also look for the mcv
                 int count = 0;
