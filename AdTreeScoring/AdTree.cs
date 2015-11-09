@@ -2,7 +2,7 @@
 using Datastructures;
 using System.Collections.Generic;
 
-namespace AdTreeScoring
+namespace Scoring
 {
     class AdTree
     {

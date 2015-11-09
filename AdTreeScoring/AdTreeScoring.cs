@@ -1,7 +1,7 @@
 ﻿using System;
 using Datastructures;
 
-namespace AdTreeScoring
+namespace Scoring
 {
     class AdTreeScoring
     {
@@ -51,6 +51,21 @@ namespace AdTreeScoring
                     maxParents = maxParentCount;
                 }
             }
+            else if (sf == "fnml") { }
+            else if (sf == "bdeu") { }
+            else
+            {
+                throw new ArgumentException("Invalid scoring function. Options are: 'BIC', 'fNML' or 'BDeu'.");
+            }
+
+            // TODO constraintsの部分
+            //scoring::Constraints* constraints = NULL;
+            //if (constraintsFile.length() > 0)
+            //{
+            //    constraints = scoring::parseConstraints(constraintsFile, network);
+            //}
+
+            ScoringFunction scoringFunction = null;
         }
     }
 }
