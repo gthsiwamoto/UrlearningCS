@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Datastructures;
 using System.Collections.Generic;
 
@@ -49,7 +48,6 @@ namespace AdTreeScoring
                     count += 1;
                 }
             }
-
             AdNode adn = new AdNode(network.Size() - i, count);
 
             // check if we should just use a leaf list
@@ -58,7 +56,7 @@ namespace AdTreeScoring
                 BitArray leafList = new BitArray(recordNums);
                 adn.LeafList = leafList;
                 return adn;
-            }
+            } 
 
             // for each of the remaining variables
             for (int j = i; j < network.Size(); j++)
@@ -118,7 +116,7 @@ namespace AdTreeScoring
                         count += 1;
                     }
                 }
-                if (k == mcv || childNums[k].Count == 0)
+                if (k == mcv || count == 0)
                 {
                     continue;
                 }
@@ -128,6 +126,7 @@ namespace AdTreeScoring
             }
 
             return vn;
+
 
         }
 
