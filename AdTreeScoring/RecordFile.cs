@@ -36,17 +36,34 @@ namespace Datastructures
                 Record line = new Record(read_line.Split(delimiter));
                 Records.Add(line);
             }
+
+            if (!hasHeader)
+            {
+                for(int i = 0; i < Records[0].Count; i++)
+                {
+                    string variableName = "Variable_" + i;
+                    header.Add(variableName);
+                }
+            }
+
             sr.Close();
 
         }
 
         public void Print()
         {
+            Console.WriteLine("=====DEBUG RecordFile START=====");
+
             // ヘッダの出力
             Console.WriteLine(string.Join(",", Header));
 
             // データの出力
             Records.ForEach(line => Console.WriteLine(string.Join(",", line)));
+
+            // Recordの数
+            Console.WriteLine(this.Size());
+
+            Console.WriteLine("=====DEBUG RecordFile END=====");
 
         }
 

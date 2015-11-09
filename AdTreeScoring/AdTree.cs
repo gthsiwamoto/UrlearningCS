@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Datastructures;
 using System.Collections.Generic;
 
@@ -48,11 +49,14 @@ namespace AdTreeScoring
                 BitArray leafList = new BitArray(recordNums);
                 adn.LeafList = leafList;
                 return adn;
-            } 
+            }
 
             // for each of the remaining variables
             for (int j = i; j < network.Size(); j++)
             {
+                Console.WriteLine("DEBUG j");
+                Console.WriteLine(j);
+
                 // create a vary node
                 Varset newVariables = variables.Set(j);
                 VaryNode child = MakeVaryNode(j, recordNums, depth, newVariables);
@@ -103,7 +107,6 @@ namespace AdTreeScoring
             }
 
             return vn;
-
 
         }
 
