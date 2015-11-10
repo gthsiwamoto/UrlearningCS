@@ -87,6 +87,9 @@ namespace Scoring
             {
                 //
             }
+
+            // TODO ScoreCalculatorの実装
+            // TODO Parallelクラスによる並列処理
         }
     }
 }
