@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace AdTreeScoring
+namespace Scoring
 {
-    class AdNode
+    class ADNode
     {
-        public AdNode(int size, int count)
+        public ADNode(int size, int count)
         {
             this.count = count;
             for(int i = 0; i < size; i++)

@@ -2,17 +2,17 @@
 using Datastructures;
 using System.Collections.Generic;
 
-namespace AdTreeScoring
+namespace Scoring
 {
-    class AdTree
+    class ADTree
     {
-        public AdTree() { }
-        public AdTree(int rMin)
+        public ADTree() { }
+        public ADTree(int rMin)
         {
             this.rMin = rMin;
         }
 
-        public AdTree(int rMin, BayesianNetwork network, RecordFile recordFile)
+        public ADTree(int rMin, BayesianNetwork network, RecordFile recordFile)
         {
             this.rMin = rMin;
             Initialize(network, recordFile);
@@ -33,10 +33,10 @@ namespace AdTreeScoring
             BitArray countIndices = new BitArray(recordCount);
             countIndices.SetAll(true);
             Varset empty = new Varset(network.Size());
-            root = MakeAdTree(0, countIndices, 0, empty);
+            root = MakeADTree(0, countIndices, 0, empty);
         }
 
-        private AdNode MakeAdTree(int i, BitArray recordNums, int depth, Varset variables)
+        private ADNode MakeADTree(int i, BitArray recordNums, int depth, Varset variables)
         {
             // since this is index i, there are (variableCount - i) remaining variables.
             // therefore, it will have that many children
@@ -48,7 +48,7 @@ namespace AdTreeScoring
                     count += 1;
                 }
             }
-            AdNode adn = new AdNode(network.Size() - i, count);
+            ADNode adn = new ADNode(network.Size() - i, count);
 
             // check if we should just use a leaf list
             if (adn.Count < rMin)
@@ -121,7 +121,7 @@ namespace AdTreeScoring
                     continue;
                 }
 
-                AdNode child = MakeAdTree(i + 1, childNums[k], depth + 1, variables);
+                ADNode child = MakeADTree(i + 1, childNums[k], depth + 1, variables);
                 vn.SetChild(k, child);
             }
 
@@ -134,7 +134,7 @@ namespace AdTreeScoring
         private BayesianNetwork network;
         private int recordCount;
         private Varset zero;
-        private AdNode root;
+        private ADNode root;
         private List<List<BitArray>> consistentRecords;
     }
 }

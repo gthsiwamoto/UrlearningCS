@@ -1,12 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Collections;
-using System;
 
 namespace Datastructures
 {
     class BayesianNetwork
     {
         public BayesianNetwork() { }
+        public BayesianNetwork(int size)
+        {
+            variables = new List<Variable>();
+            nameToIndex = new Dictionary<string, int>();
+            for (int i = 0; i < size; i++)
+            {
+                Variable v = new Variable(this, i);
+                string variableName = "Variable_" + i;
+                v.Name = variableName;
+                nameToIndex[v.Name] = variables.Count;
+                variables.Add(v);
+            }
+        }
 
         public BayesianNetwork(RecordFile recordFile)
         {
@@ -19,7 +31,17 @@ namespace Datastructures
             for (int i = 0; i < recordFile.Header.Count; i++)
             {
                 Variable v = new Variable(this, i);
-                v.Name = recordFile.Header[i];
+
+                if (recordFile.HasHeader)
+                {
+                    v.Name = recordFile.Header[i];
+                }
+                else
+                {
+                    string variableName = "Variable_" + i;
+                    v.Name = variableName;
+                }
+
                 nameToIndex[v.Name] = i;
                 variables.Add(v);
             }
