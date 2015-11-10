@@ -4,9 +4,9 @@ using Datastructures;
 
 namespace Scoring
 {
-    class AdTreeScoring
+    class ADTreeScoring
     {
-        public AdTreeScoring() { }
+        public ADTreeScoring() { }
 
         public void Execute(string[] args)
         {
@@ -25,6 +25,7 @@ namespace Scoring
             bool hasHeader = true;
             string sf = "BIC";
             int maxParents = 0;
+            string constraintsFile = "";
 
             // csvファイルの読み込み
             RecordFile recordFile = new RecordFile();
@@ -35,7 +36,7 @@ namespace Scoring
             BayesianNetwork network = new BayesianNetwork(recordFile);
 
             // AD-Treeの初期化
-            AdTree adTree = new AdTree(rMin, network, recordFile);
+            ADTree adTree = new ADTree(rMin, network, recordFile);
 
             // scoring functionの設定
             sf = sf.ToLower();
@@ -59,18 +60,33 @@ namespace Scoring
                 throw new ArgumentException("Invalid scoring function. Options are: 'BIC', 'fNML' or 'BDeu'.");
             }
 
-            // TODO constraintsの部分
-            //scoring::Constraints* constraints = NULL;
-            //if (constraintsFile.length() > 0)
-            //{
-            //    constraints = scoring::parseConstraints(constraintsFile, network);
-            //}
+            // TODO constraintsの実装
+            Constraints constraints = null;
+            if (constraintsFile.Length > 0)
+            {
+                constraints = Constraints.ParseConstraints(constraintsFile, network);
+            }
 
             ScoringFunction scoringFunction = null;
 
             List<double> ilogi = LogLikelihoodCalculator.GetLogCache(recordFile.Size());
-            LogLikelihoodCalculator llc = new LogLikelihoodCalculator(adTree, network, iloi);
+            LogLikelihoodCalculator llc = new LogLikelihoodCalculator(adTree, network, ilogi);
 
+            // TODO regretの実装
+            //std::vector<std::vector<float>*>* regret = scoring::getRegretCache(recordFile.size(), network.getMaxCardinality());
+
+            if (sf == "bic")
+            {
+                scoringFunction = new BICScoringFunction(network, recordFile, llc, constraints);
+            }
+            else if (sf == "fnml")
+            {
+                //
+            }
+            else if (sf == "bdeu")
+            {
+                //
+            }
         }
     }
 }

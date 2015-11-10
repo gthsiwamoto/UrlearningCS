@@ -1,5 +1,5 @@
 ﻿using System;
-using AdTreeScoring;
+using Scoring;
 
 namespace Scoring
 {
@@ -7,7 +7,7 @@ namespace Scoring
     {
         static void Main(string[] args)
         {
-            AdTreeScoring ats = new AdTreeScoring();
+            ADTreeScoring ats = new ADTreeScoring();
             try
             {
                 ats.Execute(args);

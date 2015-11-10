@@ -12,17 +12,17 @@ namespace Scoring
             }
         }
 
-        public void SetChild(int index, AdNode child)
+        public void SetChild(int index, ADNode child)
         {
             children[index] = child;
         }
 
-        public AdNode GetChild(int index)
+        public ADNode GetChild(int index)
         {
             return children[index];
         }
 
-        private List<AdNode> children = new List<AdNode>();
+        private List<ADNode> children = new List<ADNode>();
         private int mcv;
         public int Mcv
         {

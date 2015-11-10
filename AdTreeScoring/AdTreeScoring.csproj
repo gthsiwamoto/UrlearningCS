@@ -43,10 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdNode.cs" />
-    <Compile Include="AdTree.cs" />
-    <Compile Include="AdTreeScoring.cs" />
+    <Compile Include="ADNode.cs" />
+    <Compile Include="ADTree.cs" />
+    <Compile Include="ADTreeScoring.cs" />
     <Compile Include="BayesianNetwork.cs" />
+    <Compile Include="BICScoringFunction.cs" />
+    <Compile Include="Constraints.cs" />
     <Compile Include="LogLikelihoodCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -9,7 +9,7 @@ namespace Scoring
 {
     class LogLikelihoodCalculator
     {
-        public LogLikelihoodCalculator(AdTree adTree, BayesianNetwork network, List<double> ilogi)
+        public LogLikelihoodCalculator(ADTree adTree, BayesianNetwork network, List<double> ilogi)
         {
             Initialize(adTree, network, ilogi);
         }
@@ -26,14 +26,14 @@ namespace Scoring
             return logCache;
         }
 
-        private void Initialize(AdTree adTree, BayesianNetwork network, List<double> ilogi)
+        private void Initialize(ADTree adTree, BayesianNetwork network, List<double> ilogi)
         {
             this.adTree = adTree;
             this.network = network;
             this.ilogi = ilogi;
         }
 
-        private AdTree adTree;
+        private ADTree adTree;
         private BayesianNetwork network;
         private List<double> ilogi = new List<double>();
     }
