@@ -142,20 +142,20 @@ namespace Scoring
             {
                 if (val > 0)
                 {
-                    return 1;
+                    return -1;
                 }
                 else
                 {
-                    return -1;
+                    return 1;
                 }
             }
             else if (x.Key < y.Key)
             {
-                return 1;
+                return -1;
             }
             else
             {
-                return -1;
+                return 1;
             }
         }
 

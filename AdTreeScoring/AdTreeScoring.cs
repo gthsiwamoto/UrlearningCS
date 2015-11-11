@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Datastructures;
@@ -30,12 +31,15 @@ namespace Scoring
             int maxParents = 0;
             string constraintsFile = "";
             int runningTime = -1;
-            int threadCount = 1;
+            int threadCount = 20;
             bool prune = true;
+            string inputFile = args[0];
+            string outputFile = args[1];
+            double equivarentSampleSize = 1;
 
             // csvファイルの読み込み
             RecordFile recordFile = new RecordFile();
-            recordFile.ReadRecord(args[0], hasHeader, delimiter);
+            recordFile.ReadRecord(inputFile, hasHeader, delimiter);
             //recordFile.Print();
 
             // BayesianNetworkの初期化
@@ -119,8 +123,57 @@ namespace Scoring
                         int prunedSize = sc.Count;
                         Console.WriteLine("Thread: " + i + ", Variable: " + variable + ", Size after pruning: " + prunedSize + ", Time: " + DateTime.Now);
                     }
+
+                    string varFilename = outputFile + "." + variable;
+                    StreamWriter writer = new StreamWriter(varFilename, false);
+
+                    Variable var = network.Get(variable);
+                    writer.Write("VAR " + var.Name + "\n");
+                    writer.Write("META arity=" + var.GetCardinality() + "\n");
+                    writer.Write("META values=");
+                    for (int k = 0; k < var.GetCardinality(); k++)
+                    {
+                        writer.Write(var.GetValue(k) + " ");
+                    }
+                    writer.Write("\n");
+
+                    foreach (KeyValuePair<ulong, double> kvp in sc)
+                    {
+                        Varset parentSet = new Varset(kvp.Key);
+                        double s = kvp.Value;
+
+                        writer.Write(s + " ");
+
+                        for (int p = 0; p < network.Size(); p++)
+                        {
+                            if (parentSet.Get(p))
+                            {
+                                writer.Write(network.Get(p).Name + " ");
+                            }
+                        }
+                        writer.Write("\n");
+                    }
+                    writer.Write("\n");
+                    writer.Close();
                 }
             });
+
+            // concatenate all of the files together
+            StreamWriter outFile = new StreamWriter(outputFile, false); // 修正が必要かも
+            // first, the header information
+            string header = "META pss_version = 0.1\nMETA input_file=" + inputFile + "\nMETA num_records=" + recordFile.Size() + "\n";
+            header += "META parent_limit=" + maxParents + "\nMETA score_type=" + sf + "\nMETA ess=" + equivarentSampleSize + "\n\n";
+
+            outFile.Write(header);
+
+            for (int variable = 0; variable < network.Size(); variable++)
+            {
+                string varFilename = outputFile + "." + variable;
+                StreamReader reader = new StreamReader(varFilename);
+                outFile.Write(reader.ReadToEnd());
+                reader.Close();
+            }
+            outFile.Close();
         }
     }
 }
