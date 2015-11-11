@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System;
 
 namespace Datastructures
@@ -13,6 +14,29 @@ namespace Datastructures
         public Varset(Varset varset)
         {
             item = new BitArray(varset.item);
+        }
+
+        public Varset(ulong value)
+        {
+            int index = 0;
+            item.Length = 1;
+            for (ulong n = value; n > 0;)
+            {
+                ulong r = n % 2;
+                if (r == 1)
+                {
+                    item.Set(index, true);
+                }
+                else
+                {
+                    item.Set(index, false);
+
+                }
+                n = n / 2;
+                index += 1;
+                item.Length += 1;
+            }
+            item.Length -= 1;
         }
 
         public bool Equals(Varset varset)
@@ -277,7 +301,7 @@ namespace Datastructures
             return nextVariables;
         }
 
-        public ulong ToLong()
+        public ulong ToULong()
         {
             ulong value = 0;
             for (int i = 0; i < item.Count; i++)
@@ -288,6 +312,19 @@ namespace Datastructures
                 }
             }
             return value;
+        }
+
+        public int Cardinality()
+        {
+            int count = 0;
+            for (int i = 0; i < item.Count; i++)
+            {
+                if (item[i])
+                {
+                    count += 1;
+                }
+            }
+            return count;
         }
 
         private void AlignLength(Varset varset)

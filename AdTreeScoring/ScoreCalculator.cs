@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace Scoring
 
             if (score < 1)
             {
-                cache[empty.ToLong()] = score;
+                cache[empty.ToULong()] = score;
             }
 
             int prunedCount = 0;
@@ -67,12 +68,9 @@ namespace Scoring
                     {
                         score = scoringFunction.CalculateScore(variable, variables, cache);
 
-                        // DEBUG
-                        Console.WriteLine(variable +  ", " + score);
-
                         if (score < 0)
                         {
-                            cache[variables.ToLong()] = score;
+                            cache[variables.ToULong()] = score;
                         }
                         else
                         {
@@ -80,15 +78,84 @@ namespace Scoring
                         }
                     }
 
-                    //Console.Write("before: ");
-                    //variables.Print();
                     variables = variables.NextPermutation();
-                    //Console.Write("after:  ");
-                    //variables.Print();
-                    //Console.Write("max:    ");
-                    //max.Print();
-                    //Console.WriteLine(variables.LessThan(max));
                 }
+
+                if (!outOfTime)
+                {
+                    highestCompletedLayer = layer;
+                }
+            }
+        }
+
+        public void Prune(DoubleMap cache)
+        {
+            List<KeyValuePair<ulong, double>> pairs = new List<KeyValuePair<ulong, double>>();
+            foreach (KeyValuePair<ulong, double> kvp in cache)
+            {
+                pairs.Add(kvp);
+            }
+            pairs.Sort(Comparison);
+
+            // keep track of the ones that have been pruned
+            BitArray prunedSet = new BitArray(pairs.Count);
+            for (int i = 0; i < pairs.Count; i++)
+            {
+                if (prunedSet.Get(i))
+                {
+                    continue;
+                }
+
+                Varset pi = new Varset(pairs[i].Key);
+
+                // make sure this variable set is not in an incomplete last layer
+                if (pi.Cardinality() > highestCompletedLayer)
+                {
+                    prunedSet.Set(i, true);
+                    continue;
+                }
+
+                for (int j = i + 1; j < pairs.Count; j++)
+                {
+                    if (prunedSet.Get(j))
+                    {
+                        continue;
+                    }
+
+                    // check if parents[i] is a subset of parents[j]
+                    Varset pj = new Varset(pairs[j].Key);
+
+                    if (pi.And(pj).Equals(pi)) // 部分集合かどうかの判定
+                    {
+                        // then we can prune pj
+                        prunedSet.Set(j, true);
+                        cache.Remove(pj.ToULong());
+                    }
+                }
+            }
+        }
+
+        private static int Comparison(KeyValuePair<ulong, double> x, KeyValuePair<ulong, double> y)
+        {
+            double val = x.Value - y.Value;
+            if (Math.Abs(val) > 2 * Double.Epsilon)
+            {
+                if (val > 0)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            else if (x.Key < y.Key)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
             }
         }
 
@@ -98,5 +165,6 @@ namespace Scoring
         private int runningTime;
         private Constraints constraints;
         private bool outOfTime;
+        private int highestCompletedLayer;
     }
 }

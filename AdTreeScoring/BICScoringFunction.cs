@@ -42,7 +42,7 @@ namespace Scoring
                     //    continue;
                     //}
 
-                    double tmp = cache.ContainsKey(parents.ToLong()) ? cache[parents.ToLong()] : 0;
+                    double tmp = cache.ContainsKey(parents.ToULong()) ? cache[parents.ToULong()] : 0;
                     if (tmp + tVal > 0)
                     {
                         return 0;

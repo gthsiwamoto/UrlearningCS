@@ -31,6 +31,7 @@ namespace Scoring
             string constraintsFile = "";
             int runningTime = -1;
             int threadCount = 1;
+            bool prune = true;
 
             // csvファイルの読み込み
             RecordFile recordFile = new RecordFile();
@@ -108,7 +109,16 @@ namespace Scoring
 
                     DoubleMap sc = new DoubleMap();
                     scoreCalculator.CalculateScores(variable, sc);
-                    
+
+                    int size = sc.Count;
+                    Console.WriteLine("Thread: " + i + ", Variable: " + variable + ", Size before pruning: " + size + ", Time: " + DateTime.Now);
+
+                    if (prune)
+                    {
+                        scoreCalculator.Prune(sc);
+                        int prunedSize = sc.Count;
+                        Console.WriteLine("Thread: " + i + ", Variable: " + variable + ", Size after pruning: " + prunedSize + ", Time: " + DateTime.Now);
+                    }
                 }
             });
         }
