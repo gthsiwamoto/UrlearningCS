@@ -49,6 +49,7 @@
     <Compile Include="BayesianNetwork.cs" />
     <Compile Include="BICScoringFunction.cs" />
     <Compile Include="Constraints.cs" />
+    <Compile Include="ContingencyTableNode.cs" />
     <Compile Include="LogLikelihoodCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

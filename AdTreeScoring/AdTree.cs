@@ -1,6 +1,7 @@
-﻿using System.Collections;
-using Datastructures;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Datastructures;
 
 namespace Scoring
 {
@@ -17,6 +18,103 @@ namespace Scoring
             this.rMin = rMin;
             Initialize(network, recordFile);
             CreateTree();
+        }
+
+        public ContingencyTableNode MakeContab(Varset variables)
+        {
+            return MakeContab(variables, root, -1);
+        }
+
+        private ContingencyTableNode MakeContab(Varset remainingVariables, ADNode node, int nodeIndex)
+        {
+            // check base case
+            if (remainingVariables.Equals(zero))
+            {
+                ContingencyTableNode ctn = new ContingencyTableNode(node.Count, 0, 1);
+                return ctn;
+            }
+
+            int firstIndex = remainingVariables.FindFirst();
+            int n = network.GetCardinality(firstIndex);
+            VaryNode vn = node.GetChild(firstIndex - nodeIndex - 1);
+            ContingencyTableNode ct = new ContingencyTableNode(0, n, 0);
+            Varset newVariables = Varset.ClearCopy(remainingVariables, firstIndex);
+
+            ContingencyTableNode ctMcv = MakeContab(newVariables, node, nodeIndex);
+
+            for (int k = 0; k < n; k++)
+            {
+                if (vn.GetChild(k) == null)
+                {
+                    continue;
+                }
+
+                ADNode adn = vn.GetChild(k);
+
+                ContingencyTableNode child = null;
+                if (adn.LeafList.Count == 0) // これ注意
+                {
+                    child = MakeContab(newVariables, adn, firstIndex);
+                }
+                else
+                {
+                    child = MakeContabLeafList(newVariables, adn.LeafList);
+                }
+
+                ct.SetChild(k, child);
+                ct.LeafCount += child.LeafCount;
+
+                ctMcv.Subtract(ct.GetChild(k));
+            }
+            ct.SetChild(vn.Mcv, ctMcv);
+            ct.LeafCount += ctMcv.LeafCount;
+
+            return ct;
+        }
+
+        private ContingencyTableNode MakeContabLeafList(Varset variables, BitArray records)
+        {
+            Varset variablesCp = new Varset(variables);
+            if (variablesCp.Equals(zero))
+            {
+                int count = 0;
+                for (int i = 0; i < records.Count; i++)
+                {
+                    if (records[i])
+                    {
+                        count += 1;
+                    }
+                }
+                return new ContingencyTableNode(count, 0, 1);
+            }
+
+            int firstIndex = variables.FindFirst();
+            int cardinality = network.GetCardinality(firstIndex);
+            ContingencyTableNode ct = new ContingencyTableNode(0, cardinality, 0);
+            variablesCp.Set(firstIndex, false);
+            Varset remainingVariables = new Varset(variablesCp);
+            for (int k = 0; k < cardinality; k++)
+            {
+                BitArray r = new BitArray(recordCount);
+                r = r.Or(records);
+                r = r.And(consistentRecords[firstIndex][k]);
+
+                int count = 0;
+                for (int i = 0; i < r.Count; i++)
+                {
+                    if (r[i])
+                    {
+                        count += 1;
+                    }
+                }
+                if (count > 0)
+                {
+                    ContingencyTableNode child = MakeContabLeafList(remainingVariables, r);
+                    ct.SetChild(k, child);
+                    ct.LeafCount += child.LeafCount;
+                }
+            }
+            return ct;
         }
 
         private void Initialize(BayesianNetwork network, RecordFile recordFile)
@@ -62,7 +160,8 @@ namespace Scoring
             for (int j = i; j < network.Size(); j++)
             {
                 // create a vary node
-                Varset newVariables = variables.Set(j);
+                variables.Set(j, true);
+                Varset newVariables = new Varset(variables);
                 VaryNode child = MakeVaryNode(j, recordNums, depth, newVariables);
                 adn.SetChild(j - i, child);
             }
@@ -126,7 +225,6 @@ namespace Scoring
             }
 
             return vn;
-
 
         }
 

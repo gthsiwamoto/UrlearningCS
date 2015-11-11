@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Datastructures;
 
 namespace Scoring
 {
+    using DoubleMap = Dictionary<ulong, double>;
+
     class ADTreeScoring
     {
         public ADTreeScoring() { }
@@ -26,6 +29,8 @@ namespace Scoring
             string sf = "BIC";
             int maxParents = 0;
             string constraintsFile = "";
+            int runningTime = -1;
+            int threadCount = 1;
 
             // csvファイルの読み込み
             RecordFile recordFile = new RecordFile();
@@ -88,8 +93,24 @@ namespace Scoring
                 //
             }
 
-            // TODO ScoreCalculatorの実装
+            ScoreCalculator scoreCalculator = new ScoreCalculator(scoringFunction, maxParents, network.Size(), runningTime, constraints);
             // TODO Parallelクラスによる並列処理
+            Parallel.For(0, threadCount, i =>
+            {
+                for (int variable = 0; variable < network.Size(); variable++)
+                {
+                    if(variable % threadCount != i)
+                    {
+                        continue;
+                    }
+
+                    Console.WriteLine("Thread: " + i + ", Variable: " + variable + ", Time: " + DateTime.Now);
+
+                    DoubleMap sc = new DoubleMap();
+                    scoreCalculator.CalculateScores(variable, sc);
+                    
+                }
+            });
         }
     }
 }
