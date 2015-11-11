@@ -32,9 +32,14 @@ namespace Scoring
                 return count;
             }
         }
-        private BitArray leafList;
+        private BitArray leafList = new BitArray(0);
         public BitArray LeafList
         {
+            get
+            {
+                return leafList;
+            }
+
             set
             {
                 leafList = new BitArray(value);

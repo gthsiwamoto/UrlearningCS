@@ -26,6 +26,11 @@ namespace Datastructures
 
         }
 
+        public string GetValue(int index)
+        {
+            return values[index];
+        }
+
         public int GetCardinality()
         {
             return values.Count;
