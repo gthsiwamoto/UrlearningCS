@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Datastructures;
+using MathNet.Numerics;
 
 namespace Scoring
 {
@@ -166,5 +167,10 @@ namespace Scoring
         private Constraints constraints;
         private bool outOfTime;
         private int highestCompletedLayer;
+        
+        public static double GammaLn(double z)
+        {
+            return z == 1 ? 0 : SpecialFunctions.GammaLn(z);
+        }
     }
 }

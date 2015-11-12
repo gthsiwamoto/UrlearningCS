@@ -27,7 +27,7 @@ namespace Scoring
             int rMin = 5; // The minimum number of records in the AD-tree nodes.
             char delimiter = ',';
             bool hasHeader = true;
-            string sf = "BIC";
+            string sf = "BDeu";
             int maxParents = 0;
             string constraintsFile = "";
             int runningTime = -1;
@@ -95,7 +95,7 @@ namespace Scoring
             }
             else if (sf == "bdeu")
             {
-                //
+                scoringFunction = new BDeuScoringFunction(equivarentSampleSize, network, adTree, constraints);
             }
 
             ScoreCalculator scoreCalculator = new ScoreCalculator(scoringFunction, maxParents, network.Size(), runningTime, constraints);
