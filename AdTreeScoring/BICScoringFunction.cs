@@ -21,38 +21,39 @@ namespace Scoring
 
         public override double CalculateScore(int variable, Varset parents, DoubleMap cache)
         {
+            Varset parentsCp = new Varset(parents);
             // TODO check if this violates the constraints
             //if(constraints != NULL && !constraints.SatisfiesConstraints(variable, parents))
             //{
             //}
 
             // check for prunning
-            double tVal = T(variable, parents);
+            double tVal = T(variable, parentsCp);
 
             for (int x = 0; x < network.Size(); x++)
             {
-                if (parents.Get(x))
+                if (parentsCp.Get(x))
                 {
-                    parents.Set(x, false);
+                    parentsCp.Set(x, false);
 
                     // TODO check the constraints
-                    //if (invalidParents.Count > 0 && invalidParents.Contains(parents))
+                    //if (invalidParents.Count > 0 && invalidParents.Contains(parentsCp.ToULong()))
                     //{
-                    //    parents.Set(x);
+                    //    parentsCp.Set(x);
                     //    continue;
                     //}
 
-                    double tmp = cache.ContainsKey(parents.ToULong()) ? cache[parents.ToULong()] : 0;
+                    double tmp = cache.ContainsKey(parentsCp.ToULong()) ? cache[parentsCp.ToULong()] : 0;
                     if (tmp + tVal > 0)
                     {
                         return 0;
                     }
 
-                    parents.Set(x, true);
+                    parentsCp.Set(x, true);
                 }
             }
 
-            double score = llc.Calculate(variable, parents);
+            double score = llc.Calculate(variable, parentsCp);
 
             // structure penalty
             score -= tVal * baseComplexityPenalty;
@@ -78,6 +79,6 @@ namespace Scoring
         private Constraints constraints;
         private LogLikelihoodCalculator llc;
         private double baseComplexityPenalty;
-        private HashSet<Varset> invalidParents;
+        private HashSet<ulong> invalidParents;
     }
 }
