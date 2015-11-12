@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdTreeScoring", "AdTreeScoring\AdTreeScoring.csproj", "{9867479A-5FB9-41EB-B4B9-6DB29ADB33A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADTreeScoring", "AdTreeScoring\ADTreeScoring.csproj", "{9867479A-5FB9-41EB-B4B9-6DB29ADB33A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

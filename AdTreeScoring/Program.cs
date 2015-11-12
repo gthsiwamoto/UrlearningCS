@@ -1,7 +1,7 @@
 ﻿using System;
 using Scoring;
 
-namespace Scoring
+namespace Main
 {
     class MainClass
     {
