@@ -60,6 +60,11 @@ namespace Datastructures
             return variables[variable];
         }
 
+        public Variable Get(string variable)
+        {
+            return variables[nameToIndex[variable]];
+        }
+
         public List<List<BitArray>> GetConsistentRecords(RecordFile recordFile)
         {
             List<List<BitArray>> consistentRecords = new List<List<BitArray>>();
@@ -92,6 +97,20 @@ namespace Datastructures
         public int GetCardinality(int variable)
         {
             return variables[variable].GetCardinality();
+        }
+
+        public int GetVariableIndex(string variable)
+        {
+            return nameToIndex[variable];
+        }
+
+        public Variable AddVariable(string name)
+        {
+            nameToIndex[name] = variables.Count;
+            Variable v = new Variable(this, variables.Count);
+            v.Name = name;
+            variables.Add(v);
+            return v;
         }
 
         private List<Variable> variables = new List<Variable>();

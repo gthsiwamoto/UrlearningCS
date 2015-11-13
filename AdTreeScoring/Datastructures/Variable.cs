@@ -36,6 +36,30 @@ namespace Datastructures
             return values.Count;
         }
 
+        public void SetArity(int arity)
+        {
+            values.Clear();
+            for (int i = 0; i < arity; i++)
+            {
+                values.Add("Value_" + i);
+            }
+        }
+
+        public void SetValues(List<string> values)
+        {
+            this.values.Clear();
+            this.valueToIndex.Clear();
+            for (int i = 0; i < values.Count; i++)
+            {
+                AddValue(values[i]);
+            }
+        }
+
+        public void UpdateMetaInformation(string key, string value)
+        {
+            metaInformation[key] = value;
+        }
+
         private string name;
         public string Name
         {
@@ -51,6 +75,13 @@ namespace Datastructures
         }
 
         private int index;
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+        }
         private BayesianNetwork network;
         private Dictionary<string, int> valueToIndex = new Dictionary<string, int>(); 
         public Dictionary<string, int> ValueToIndex
@@ -61,5 +92,6 @@ namespace Datastructures
             }
         }
         private List<string> values = new List<string>();
+        Dictionary<string, string> metaInformation = new Dictionary<string, string>();
     }
 }

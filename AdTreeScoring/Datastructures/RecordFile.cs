@@ -30,7 +30,7 @@ namespace Datastructures
                 header = new List<string>(header_line.Split(delimiter));
             }
 
-            while (sr.EndOfStream == false)
+            while (!sr.EndOfStream)
             {
                 string read_line = sr.ReadLine();
                 Record line = new Record(read_line.Split(delimiter));

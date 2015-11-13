@@ -85,6 +85,37 @@ namespace Datastructures
             item.Set(index, value);
         }
 
+        public void SetAll(bool value)
+        {
+            item.SetAll(value);
+        }
+
+        public void SetFromCsv(string csv)
+        {
+            // do nothing for empty strings
+            if (csv.Length == 0)
+            {
+                return;
+            }
+
+            // split out the scc variables
+            List<string> tokens = new List<string>();
+            string[] delimiters = { "," };
+            tokens.AddRange(csv.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                int var = int.Parse(tokens[i]);
+
+                // at least a little error checking
+                if (var == 0 && tokens[i] != "")
+                {
+                    throw new FormatException("Invalid csv string: '" + csv + "'");
+                }
+                Set(var, true);
+            }
+        }
+
         public bool Get(int index)
         {
             if (index >= item.Count)

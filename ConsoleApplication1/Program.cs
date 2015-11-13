@@ -1,5 +1,8 @@
 ﻿using System;
-using Scoring;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using AStar;
 
 namespace Main
@@ -10,14 +13,13 @@ namespace Main
         {
             try
             {
-                //ADTreeScoring.Execute(args);
                 AStarLearning.Execute(args);
             }
             catch (ArgumentException e)
             {
                 Console.WriteLine(e.Message);
             }
-            //Console.In.ReadLine();
+            Console.In.ReadLine();
         }
     }
 }
