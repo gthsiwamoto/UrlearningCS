@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("URLearning_cs")]
+[assembly: AssemblyTitle("AdTreeScoring")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("URLearning_cs")]
+[assembly: AssemblyProduct("AdTreeScoring")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // このプロジェクトが COM に公開される場合、次の GUID が typelib の ID になります
-[assembly: Guid("9fbf5e44-3351-4516-92d9-52dd66381115")]
+[assembly: Guid("9867479a-5fb9-41eb-b4b9-6db29adb33a7")]
 
 // アセンブリのバージョン情報は次の 4 つの値で構成されています:
 //

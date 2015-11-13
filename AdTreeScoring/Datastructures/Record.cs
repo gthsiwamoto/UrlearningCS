@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace URLearning_cs
+namespace Datastructures
 {
-    class Program
+    class Record : List<string>
     {
-        static void Main(string[] args)
+        public Record(string[] string_array) : base(string_array)
         {
         }
     }
