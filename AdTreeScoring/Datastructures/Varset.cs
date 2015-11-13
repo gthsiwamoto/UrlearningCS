@@ -14,12 +14,13 @@ namespace Datastructures
         public Varset(Varset varset)
         {
             item = new BitArray(varset.item);
+            item.Length = 64;
         }
 
         public Varset(ulong value)
         {
             int index = 0;
-            item.Length = 1;
+            item.Length = 64;
             for (ulong n = value; n > 0;)
             {
                 ulong r = n % 2;
@@ -137,6 +138,13 @@ namespace Datastructures
             return -1;
         }
 
+        public int FindNext(int index)
+        {
+            Varset tmp = new Varset(this);
+            tmp = tmp.RightShift(index);
+            return tmp.FindFirst() + index + 1;
+        }
+
         public void Print()
         {
             string s = "{";
@@ -144,13 +152,8 @@ namespace Datastructures
             {
                 if (item[i])
                 {
-                    s += "1";
+                    s += i + ", ";
                 }
-                else
-                {
-                    s += "0";
-                }
-                s += ", ";
             }
             s += "}";
             Console.WriteLine(s);

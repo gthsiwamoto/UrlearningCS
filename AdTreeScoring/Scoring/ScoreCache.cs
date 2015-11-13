@@ -188,6 +188,13 @@ namespace Scoring
             }
         }
         private BayesianNetwork network;
+        public BayesianNetwork Network
+        {
+            get
+            {
+                return network;
+            }
+        }
         private List<int> variableCardinalities = new List<int>();
         private List<DoubleMap> cache = new List<DoubleMap>();
         private Dictionary<string, string> metaInformation = new Dictionary<string, string>();

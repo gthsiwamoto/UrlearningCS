@@ -49,9 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AStar\AStarLearning.cs" />
+    <Compile Include="Datastructures\Node.cs" />
+    <Compile Include="Datastructures\PriorityQueue.cs" />
+    <Compile Include="Heuristics\Heuristic.cs" />
     <Compile Include="BestScoreCalculators\BestScoreCreator.cs" />
     <Compile Include="BestScoreCalculators\BestScoreCalculator.cs" />
     <Compile Include="BestScoreCalculators\SparseParentList.cs" />
+    <Compile Include="Heuristics\HeuristicCreator.cs" />
+    <Compile Include="Heuristics\StaticPatternDatabase.cs" />
     <Compile Include="Scoring\ScoreCache.cs" />
     <Compile Include="Scoring\ADNode.cs" />
     <Compile Include="Scoring\ADTree.cs" />
