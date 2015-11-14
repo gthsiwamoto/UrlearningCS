@@ -12,7 +12,7 @@ namespace Scoring
     {
         public ADTreeScoring() { }
 
-        public void Execute(string[] args)
+        public static void Execute(string[] args)
         {
             // 引数のチェック
             if (args.Length != 2)

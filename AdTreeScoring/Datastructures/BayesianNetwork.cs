@@ -60,6 +60,11 @@ namespace Datastructures
             return variables[variable];
         }
 
+        public Variable Get(string variable)
+        {
+            return variables[nameToIndex[variable]];
+        }
+
         public List<List<BitArray>> GetConsistentRecords(RecordFile recordFile)
         {
             List<List<BitArray>> consistentRecords = new List<List<BitArray>>();
@@ -92,6 +97,64 @@ namespace Datastructures
         public int GetCardinality(int variable)
         {
             return variables[variable].GetCardinality();
+        }
+
+        public int GetVariableIndex(string variable)
+        {
+            return nameToIndex[variable];
+        }
+
+        public void FixCardinality()
+        {
+            for (int i = 0; i < variables.Count; i++)
+            {
+                variables[i].FixCardinality();
+            }
+        }
+
+        public void SetParents(List<Varset> parents)
+        {
+            int i = 0;
+            for(int k = 0; k < variables.Count; k++)
+            {
+                variables[k].SetParents(parents[i]);
+                i += 1;
+            }
+            SetDefaultParentOrder();
+        }
+
+        public void SetDefaultParentOrder()
+        {
+            for (int i = 0; i < Size(); i++)
+            {
+                Get(i).SetDefaultParentOrder();
+            }
+        }
+
+        public void SetUniformProbabilities()
+        {
+            UpdateParameterSize();
+            for (int i = 0; i < Size(); i++)
+            {
+                Get(i).SetUniformProbabilities();
+            }
+        }
+
+        public void UpdateParameterSize()
+        {
+            for (int i = 0; i < Size(); i++)
+            {
+                Get(i).UpdateParameterSize();
+            }
+        }
+
+        public Variable AddVariable(string name)
+        {
+            nameToIndex[name] = variables.Count;
+            Variable v = new Variable(this, variables.Count);
+            v.Name = name;
+            variables.Add(v);
+            return v;
         }
 
         private List<Variable> variables = new List<Variable>();

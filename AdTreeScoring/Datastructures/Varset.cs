@@ -19,7 +19,7 @@ namespace Datastructures
         public Varset(ulong value)
         {
             int index = 0;
-            item.Length = 1;
+            item.Length = 64;
             for (ulong n = value; n > 0;)
             {
                 ulong r = n % 2;
@@ -85,6 +85,37 @@ namespace Datastructures
             item.Set(index, value);
         }
 
+        public void SetAll(bool value)
+        {
+            item.SetAll(value);
+        }
+
+        public void SetFromCsv(string csv)
+        {
+            // do nothing for empty strings
+            if (csv.Length == 0)
+            {
+                return;
+            }
+
+            // split out the scc variables
+            List<string> tokens = new List<string>();
+            string[] delimiters = { "," };
+            tokens.AddRange(csv.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                int var = int.Parse(tokens[i]);
+
+                // at least a little error checking
+                if (var == 0 && tokens[i] != "")
+                {
+                    throw new FormatException("Invalid csv string: '" + csv + "'");
+                }
+                Set(var, true);
+            }
+        }
+
         public bool Get(int index)
         {
             if (index >= item.Count)
@@ -106,6 +137,13 @@ namespace Datastructures
             return -1;
         }
 
+        public int FindNext(int index)
+        {
+            Varset tmp = new Varset(this);
+            tmp = tmp.RightShift(index);
+            return tmp.FindFirst() + index + 1;
+        }
+
         public void Print()
         {
             string s = "{";
@@ -113,13 +151,8 @@ namespace Datastructures
             {
                 if (item[i])
                 {
-                    s += "1";
+                    s += i + ", ";
                 }
-                else
-                {
-                    s += "0";
-                }
-                s += ", ";
             }
             s += "}";
             Console.WriteLine(s);
@@ -325,6 +358,23 @@ namespace Datastructures
                 }
             }
             return count;
+        }
+
+        public int PreviousSetBit(int index)
+        {
+            for (int i = index - 1; i >= 0; i--)
+            {
+                if (this.Get(i))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public int LastSetBit()
+        {
+            return PreviousSetBit(item.Count);
         }
 
         private void AlignLength(Varset varset)
