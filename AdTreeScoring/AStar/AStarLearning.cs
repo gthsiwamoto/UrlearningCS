@@ -27,7 +27,7 @@ namespace AStar
 
             // オプションのチェック
             // 暫定的に初期値を代入
-            scoreFile = args[0];
+            scoreFile = "score.output";
             bestScoreCalculator = "list";
             heuristicType = "static";
             heuristicArgument = "2";

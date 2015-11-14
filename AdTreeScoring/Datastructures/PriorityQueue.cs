@@ -23,8 +23,8 @@ namespace Datastructures
             }
 
             double diff = x.F - y.F;
-            //double epsilon = Double.Epsilon;
-            double epsilon = 0;
+            double epsilon = Double.Epsilon;
+            //double epsilon = 0;
             if (Math.Abs(diff) < epsilon)
             {
                 return y.GetLayer() - x.GetLayer() > 0 ? 1 : -1;

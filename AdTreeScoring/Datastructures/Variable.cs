@@ -24,7 +24,6 @@ namespace Datastructures
                 valueToIndex[value] = GetCardinality();
                 values.Add(value);
             }
-
         }
 
         public string GetValue(int index)

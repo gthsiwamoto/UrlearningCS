@@ -8,9 +8,10 @@ namespace Main
     {
         static void Main(string[] args)
         {
-            AStarLearning asl = new AStarLearning();
-            //ADTreeScoring.Execute(args);
-            asl.Execute(args);
+            ADTreeScoring.Execute(args);
+            //AStarLearning asl = new AStarLearning();
+            //asl.Execute(args);
+
             //catch (ArgumentException e)
             //{
             //    Console.WriteLine(e.Message);

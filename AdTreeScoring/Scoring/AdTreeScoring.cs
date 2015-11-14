@@ -15,26 +15,26 @@ namespace Scoring
         public static void Execute(string[] args)
         {
             // 引数のチェック
-            if (args.Length != 2)
-            {
-                // エラーメッセージ表示
-                Console.WriteLine("[エラー] 引数の数が不正です");
-                Environment.Exit(0);
-            }
+            //if (args.Length != 2)
+            //{
+            //    // エラーメッセージ表示
+            //    Console.WriteLine("[エラー] 引数の数が不正です");
+            //    Environment.Exit(0);
+            //}
 
             // オプションのチェック
             // 暫定的に初期値を代入
             int rMin = 5; // The minimum number of records in the AD-tree nodes.
             char delimiter = ',';
             bool hasHeader = true;
-            string sf = "BDeu";
+            string sf = "suzuki";
             int maxParents = 0;
             string constraintsFile = "";
             int runningTime = -1;
-            int threadCount = 20;
+            int threadCount = 1;
             bool prune = true;
-            string inputFile = args[0];
-            string outputFile = args[1];
+            string inputFile = "a.csv";
+            string outputFile = "score.a.output";
             double equivarentSampleSize = 1;
 
             // csvファイルの読み込み
@@ -65,9 +65,10 @@ namespace Scoring
             }
             else if (sf == "fnml") { }
             else if (sf == "bdeu") { }
+            else if (sf == "suzuki") { }
             else
             {
-                throw new ArgumentException("Invalid scoring function. Options are: 'BIC', 'fNML' or 'BDeu'.");
+                throw new ArgumentException("Invalid scoring function. Options are: 'BIC', 'fNML', 'BDeu' or 'Suzuki'.");
             }
 
             // TODO constraintsの実装
@@ -96,6 +97,11 @@ namespace Scoring
             else if (sf == "bdeu")
             {
                 scoringFunction = new BDeuScoringFunction(equivarentSampleSize, network, adTree, constraints);
+            }
+            else if (sf == "suzuki")
+            {
+                // TODO constraintsを反映する
+                scoringFunction = new SuzukiScoringFunction(network, adTree);
             }
 
             ScoreCalculator scoreCalculator = new ScoreCalculator(scoringFunction, maxParents, network.Size(), runningTime, constraints);

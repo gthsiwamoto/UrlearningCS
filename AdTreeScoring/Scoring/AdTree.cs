@@ -231,6 +231,13 @@ namespace Scoring
         private int rMin;
         private BayesianNetwork network;
         private int recordCount;
+        public int RecordCount
+        {
+            get
+            {
+                return RecordCount;
+            }
+        }
         private Varset zero;
         private ADNode root;
         private List<List<BitArray>> consistentRecords;

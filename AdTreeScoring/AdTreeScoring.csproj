@@ -76,6 +76,7 @@
     <Compile Include="Scoring\ScoringFunction.cs" />
     <Compile Include="Datastructures\Variable.cs" />
     <Compile Include="Datastructures\Varset.cs" />
+    <Compile Include="Scoring\SuzukiScoringFunction.cs" />
     <Compile Include="Scoring\VaryNode.cs" />
   </ItemGroup>
   <ItemGroup>

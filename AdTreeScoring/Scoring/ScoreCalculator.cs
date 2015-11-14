@@ -172,5 +172,10 @@ namespace Scoring
         {
             return z == 1 ? 0 : SpecialFunctions.GammaLn(z);
         }
+
+        public static double Gamma(double z)
+        {
+            return SpecialFunctions.Gamma(z);
+        }
     }
 }
