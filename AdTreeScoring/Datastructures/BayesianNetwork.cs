@@ -104,6 +104,50 @@ namespace Datastructures
             return nameToIndex[variable];
         }
 
+        public void FixCardinality()
+        {
+            for (int i = 0; i < variables.Count; i++)
+            {
+                variables[i].FixCardinality();
+            }
+        }
+
+        public void SetParents(List<Varset> parents)
+        {
+            int i = 0;
+            for(int k = 0; k < variables.Count; k++)
+            {
+                variables[k].SetParents(parents[i]);
+                i += 1;
+            }
+            SetDefaultParentOrder();
+        }
+
+        public void SetDefaultParentOrder()
+        {
+            for (int i = 0; i < Size(); i++)
+            {
+                Get(i).SetDefaultParentOrder();
+            }
+        }
+
+        public void SetUniformProbabilities()
+        {
+            UpdateParameterSize();
+            for (int i = 0; i < Size(); i++)
+            {
+                Get(i).SetUniformProbabilities();
+            }
+        }
+
+        public void UpdateParameterSize()
+        {
+            for (int i = 0; i < Size(); i++)
+            {
+                Get(i).UpdateParameterSize();
+            }
+        }
+
         public Variable AddVariable(string name)
         {
             nameToIndex[name] = variables.Count;

@@ -30,6 +30,11 @@ namespace BestScoreCalculators
             }
         }
 
+        public override Varset GetParents()
+        {
+            return parents[bestIndex];
+        }
+
         public double GetBestScore()
         {
             return scores[0];

@@ -11,5 +11,13 @@ namespace Datastructures
         public Record(string[] string_array) : base(string_array)
         {
         }
+
+        public Record(int size) : base()
+        {
+            for (int i = 0; i < size; i++)
+            {
+                this.Add("");
+            }
+        }
     }
 }

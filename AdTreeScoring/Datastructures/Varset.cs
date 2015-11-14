@@ -14,7 +14,6 @@ namespace Datastructures
         public Varset(Varset varset)
         {
             item = new BitArray(varset.item);
-            item.Length = 64;
         }
 
         public Varset(ulong value)
@@ -359,6 +358,23 @@ namespace Datastructures
                 }
             }
             return count;
+        }
+
+        public int PreviousSetBit(int index)
+        {
+            for (int i = index - 1; i >= 0; i--)
+            {
+                if (this.Get(i))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public int LastSetBit()
+        {
+            return PreviousSetBit(item.Count);
         }
 
         private void AlignLength(Varset varset)

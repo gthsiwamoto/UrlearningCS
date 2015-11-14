@@ -7,6 +7,7 @@ using Scoring;
 using Datastructures;
 using BestScoreCalculators;
 using Heuristics;
+using FileIO;
 
 namespace AStar
 {
@@ -14,7 +15,7 @@ namespace AStar
 
     class AStarLearning
     {
-        public static void Execute(string[] args)
+        public void Execute(string[] args)
         {
             // 引数のチェック
             if (args.Length != 1)
@@ -26,14 +27,15 @@ namespace AStar
 
             // オプションのチェック
             // 暫定的に初期値を代入
-            string bestScoreCalculator = "list";
-            string heuristicType = "static";
-            string heuristicArgument = "2";
-            string scoreFile = args[0];
-            string netFile = "";
-            string ancestorsArgument = "";
-            string sccArgument = "";
-            int runningTime = 0;
+            scoreFile = args[0];
+            bestScoreCalculator = "list";
+            heuristicType = "static";
+            heuristicArgument = "2";
+            netFile = "bic.netfile";
+            ancestorsArgument = "";
+            sccArgument = "";
+            runningTime = 0;
+            outOfTime = false;
 
             // csvファイルの読み込み
             //RecordFile recordFile = new RecordFile();
@@ -55,8 +57,8 @@ namespace AStar
             int variableCount = cache.VariableCount;
 
             // parse the ancestor and scc variables
-            Varset ancestors = new Varset(variableCount);
-            Varset scc = new Varset(variableCount);
+            ancestors = new Varset(variableCount);
+            scc = new Varset(variableCount);
 
             // if no sc was specified, assume we just want to learn everything
             if (sccArgument == "")
@@ -97,10 +99,9 @@ namespace AStar
 
             double upperBound = Double.MaxValue;
             bool complete = false;
-            bool outOfTime = false;
 
             Console.WriteLine("Beginning search");
-            int nodesExpanded = 0;
+            nodesExpanded = 0;
             while (openList.Count() > 0 && !outOfTime)
             {
                 Node u = openList.Pop();
@@ -144,13 +145,13 @@ namespace AStar
 
                     Node succ = generatedNodes.ContainsKey(newVariables.ToULong()) ? generatedNodes[newVariables.ToULong()] : null;
 
+                    Console.Write("About to check for using leaf '" + leaf + "', newVariables: ");
+                    newVariables.Print();
                     // check if this is the first time we have generated this node
                     double g;
                     if (succ == null)
                     {
                         // get the cost along this path
-                        Console.Write("About to check for using leaf '" + leaf + "', newVariables: ");
-                        newVariables.Print();
 
                         g = u.G + spgs[leaf].GetScore(newVariables);
 
@@ -158,7 +159,8 @@ namespace AStar
                         complete = false;
                         double h = heuristic.h(newVariables, complete);
 
-                        Console.WriteLine("g: " + g + "h: " + h);
+                        double f = g + h;
+                        Console.WriteLine("g: " + g + ", h: " + h + ", f: " + f);
 
                         // update all the values
                         succ = new Node(g, h, newVariables, leaf);
@@ -199,12 +201,18 @@ namespace AStar
 
             if (goal != null)
             {
-                Console.WriteLine("Found solution: ", goal.F);
+                Console.WriteLine("Found solution: " + goal.F);
 
                 if (netFile.Length > 0)
                 {
                     BayesianNetwork network = cache.Network;
-                    // TODO
+                    network.FixCardinality();
+                    List<Varset> optimalParents = ReconstructSolution(goal, spgs, generatedNodes);
+                    network.SetParents(optimalParents);
+                    network.SetUniformProbabilities();
+
+                    HuginStructureWriter writer = new HuginStructureWriter();
+                    writer.Write(network, netFile);
                 }
             }
             else
@@ -214,5 +222,44 @@ namespace AStar
                 Console.WriteLine("Lower bound: ", u.F);
             }
         }
+
+        private List<Varset> ReconstructSolution(Node goal, List<BestScoreCalculator> spgs, NodeMap closedList)
+        {
+            List<Varset> optimalParents = new List<Varset>();
+            for (int i = 0; i < spgs.Count; i++)
+            {
+                optimalParents.Add(new Varset(spgs.Count));
+            }
+
+            Varset remainingVariables = new Varset(goal.SubNetwork);
+            Node current = goal;
+            double score = 0;
+            int count = scc.Cardinality();
+            for (int i = 0; i < count; i++)
+            {
+                int leaf = current.Leaf;
+                score += spgs[leaf].GetScore(remainingVariables);
+                Varset parents = spgs[leaf].GetParents();
+                optimalParents[leaf] = parents;
+                remainingVariables.Set(leaf, false);
+                current = closedList.ContainsKey(remainingVariables.ToULong()) ? closedList[remainingVariables.ToULong()] : null;
+            }
+            return optimalParents;
+        }
+
+        private string bestScoreCalculator = "list";
+        private string heuristicType = "static";
+        private string heuristicArgument = "2";
+        private string scoreFile;
+        private string netFile = "";
+        private string ancestorsArgument = "";
+        private string sccArgument = "";
+        private int runningTime = 0;
+        private bool outOfTime = false;
+        private int nodesExpanded;
+        private Varset ancestors;
+        private Varset scc;
+
+
     }
 }

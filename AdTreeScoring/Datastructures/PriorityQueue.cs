@@ -23,7 +23,9 @@ namespace Datastructures
             }
 
             double diff = x.F - y.F;
-            if (Math.Abs(diff) < Double.Epsilon)
+            //double epsilon = Double.Epsilon;
+            double epsilon = 0;
+            if (Math.Abs(diff) < epsilon)
             {
                 return y.GetLayer() - x.GetLayer() > 0 ? 1 : -1;
             }
@@ -55,7 +57,6 @@ namespace Datastructures
         public Node Pop()
         {
             Node ret = heap[0];
-            heap.RemoveAt(0);
 
             if (heap.Count == 0)
             {
@@ -85,6 +86,7 @@ namespace Datastructures
                 i = a;
             }
             heap[i] = x;
+            heap.RemoveAt(heap.Count - 1);
 
             return ret;
         }

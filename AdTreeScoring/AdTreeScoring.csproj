@@ -51,6 +51,7 @@
     <Compile Include="AStar\AStarLearning.cs" />
     <Compile Include="Datastructures\Node.cs" />
     <Compile Include="Datastructures\PriorityQueue.cs" />
+    <Compile Include="FileIO\HuginStructureWriter.cs" />
     <Compile Include="Heuristics\Heuristic.cs" />
     <Compile Include="BestScoreCalculators\BestScoreCreator.cs" />
     <Compile Include="BestScoreCalculators\BestScoreCalculator.cs" />
