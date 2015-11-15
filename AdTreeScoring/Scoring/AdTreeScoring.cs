@@ -31,10 +31,10 @@ namespace Scoring
             int maxParents = 0;
             string constraintsFile = "";
             int runningTime = -1;
-            int threadCount = 1;
+            int threadCount = 20;
             bool prune = true;
-            string inputFile = "a.csv";
-            string outputFile = "score.a.output";
+            string inputFile = "hepatitis.headers.csv";
+            string outputFile = "score.suzuki.output";
             double equivarentSampleSize = 1;
 
             // csvファイルの読み込み

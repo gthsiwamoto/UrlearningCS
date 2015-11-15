@@ -14,6 +14,7 @@ namespace Scoring
         public SuzukiScoringFunction(BayesianNetwork network, ADTree adTree)
         {
             this.adTree = adTree;
+            this.network = network;
         }
 
         public override double CalculateScore(int variable, Varset parents, DoubleMap cache)
@@ -48,16 +49,17 @@ namespace Scoring
 
             double a = 0.5;
             double n = adTree.RecordCount;
-            double gammaRA = ScoreCalculator.Gamma(r * a);
-            double gammaAR = Math.Pow(ScoreCalculator.Gamma(a), a);
-            double gammaNRA = ScoreCalculator.Gamma(n + r * a);
-            double gammaXCA = 1;
+            double gammaLnRA = ScoreCalculator.GammaLn(r * a);
+            double rGammaLnA = r * ScoreCalculator.GammaLn(a);
+            double gammaLnNRA = ScoreCalculator.GammaLn(n + r * a);
+            double gammaLnXCA = 0;
             for (int i = 0; i < r; i++)
             {
-                gammaXCA *= ScoreCalculator.Gamma(formatedCt[i] + a);
+                gammaLnXCA += ScoreCalculator.GammaLn(formatedCt[i] + a);
             }
 
-            return (gammaRA * gammaXCA) / (gammaAR * gammaNRA);
+            double score = (gammaLnRA + gammaLnXCA) - (rGammaLnA + gammaLnNRA);
+            return score;
         }
 
         private void FormatContingencyTable(ContingencyTableNode ct, Varset variables, int previousVariable, int [] formatedCt, ref int index)
@@ -76,6 +78,10 @@ namespace Scoring
                 {
                     break;
                 }
+            }
+            if (thisVariable == network.Size())
+            {
+                return;
             }
 
             for (int i = 0; i < network.GetCardinality(thisVariable); i++)

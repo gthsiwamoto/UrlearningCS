@@ -235,7 +235,7 @@ namespace Scoring
         {
             get
             {
-                return RecordCount;
+                return recordCount;
             }
         }
         private Varset zero;
