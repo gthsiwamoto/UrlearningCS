@@ -49,7 +49,7 @@ namespace BestScoreCalculators
                     break;
                 }
 
-                if (bestIndex == scores.Count)
+                if (bestIndex == scores.Count - 1)
                 {
                     return Double.MaxValue;
                 }

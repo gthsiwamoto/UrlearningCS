@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,29 +19,34 @@ namespace AStar
         public void Execute(string[] args)
         {
             // 引数のチェック
-            if (args.Length != 1)
-            {
-                // エラーメッセージ表示
-                Console.WriteLine("[エラー] 引数の数が不正です");
-                Environment.Exit(0);
-            }
+            //if (args.Length != 1)
+            //{
+            //    // エラーメッセージ表示
+            //    Console.WriteLine("[エラー] 引数の数が不正です");
+            //    Environment.Exit(0);
+            //}
 
             // オプションのチェック
             // 暫定的に初期値を代入
-            scoreFile = "score.output";
+            string basename = "autos";
+            scoreFile = "scores/" + basename + ".output";
             bestScoreCalculator = "list";
             heuristicType = "static";
             heuristicArgument = "2";
-            netFile = "bic.netfile";
+            netFile = "netfiles/" + basename + ".netfile";
             ancestorsArgument = "";
             sccArgument = "";
             runningTime = 0;
             outOfTime = false;
-
-            // csvファイルの読み込み
-            //RecordFile recordFile = new RecordFile();
-            //recordFile.ReadRecord(inputFile, hasHeader, delimiter);
-            //recordFile.Print();
+            // SUZUKI
+            suzuki = true;
+            int deltaCount = 0;
+            int totalCount = 0;
+            string inputRecordFile = "records/" + basename + ".csv";
+            string localScoreFile = "localscores/" + basename + ".csv";
+            bool hasHeader = true;
+            char delimiter = ',';
+            int rMin = 5; // The minimum number of records in the AD-tree nodes.
 
             Console.WriteLine("URLerning A*");
             Console.WriteLine("Dataset: '" + scoreFile + "'");
@@ -69,6 +75,23 @@ namespace AStar
             {
                 scc.SetFromCsv(sccArgument);
                 ancestors.SetFromCsv(ancestorsArgument);
+            }
+
+            SuzukiScoringFunction suzukiScoringFunction = null;
+            if (suzuki)
+            {
+                // csvファイルの読み込み
+                RecordFile recordFile = new RecordFile();
+                recordFile.ReadRecord(inputRecordFile, hasHeader, delimiter);
+
+                // BayesianNetworkの初期化
+                BayesianNetwork network = new BayesianNetwork(recordFile);
+
+                // AD-Treeの初期化
+                ADTree adTree = new ADTree(rMin, network, recordFile);
+
+                suzukiScoringFunction = new SuzukiScoringFunction(network, adTree);
+                suzukiScoringFunction.ReadLocalScoreMap(localScoreFile);
             }
 
             Console.WriteLine("Creating BestScore Calculators.");
@@ -100,6 +123,8 @@ namespace AStar
             double upperBound = Double.MaxValue;
             bool complete = false;
 
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             Console.WriteLine("Beginning search");
             nodesExpanded = 0;
             while (openList.Count() > 0 && !outOfTime)
@@ -158,6 +183,17 @@ namespace AStar
                         // calculate the heuristic estimate
                         complete = false;
                         double h = heuristic.h(newVariables, complete);
+                        if (suzuki)
+                        {
+                            totalCount++;
+                            double delta = suzukiScoringFunction.SuzukiDelta(newVariables);
+                            if (delta > 0)
+                            {
+                                deltaCount++;
+                            }
+                            Console.WriteLine("delta: " + delta);
+                            h += delta;
+                        }
 
                         double f = g + h;
                         Console.WriteLine("g: " + g + ", h: " + h + ", f: " + f);
@@ -195,7 +231,10 @@ namespace AStar
                 }
             }
 
+            sw.Stop();
             Console.WriteLine("Nodes expanded: " + nodesExpanded + ", open list size: " + openList.Count());
+            Console.WriteLine("Total Count: " + totalCount + ", Delta Count: " + deltaCount);
+            Console.WriteLine(sw.Elapsed);
 
             heuristic.PrintStatistics();
 
@@ -220,6 +259,10 @@ namespace AStar
                 Node u = openList.Pop();
                 Console.WriteLine("No solution found.");
                 Console.WriteLine("Lower bound: ", u.F);
+            }
+            if (suzuki)
+            {
+                suzukiScoringFunction.OutputLocalScoreMap(localScoreFile);
             }
         }
 
@@ -256,6 +299,7 @@ namespace AStar
         private string sccArgument = "";
         private int runningTime = 0;
         private bool outOfTime = false;
+        private bool suzuki = false;
         private int nodesExpanded;
         private Varset ancestors;
         private Varset scc;
