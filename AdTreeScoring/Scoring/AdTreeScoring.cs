@@ -26,15 +26,16 @@ namespace Scoring
             // 暫定的に初期値を代入
             int rMin = 5; // The minimum number of records in the AD-tree nodes.
             char delimiter = ',';
-            bool hasHeader = true;
+            bool hasHeader = false;
             string sf = "suzuki";
-            int maxParents = 0;
+            int maxParents = 3;
             string constraintsFile = "";
             int runningTime = -1;
-            int threadCount = 20;
+            int threadCount = 1;
             bool prune = true;
-            string inputFile = "hepatitis.headers.csv";
-            string outputFile = "score.suzuki.output";
+            string basename = "autos";
+            string inputFile = "records/" + basename + ".csv";
+            string outputFile = basename + ".output";
             double equivarentSampleSize = 1;
 
             // csvファイルの読み込み
